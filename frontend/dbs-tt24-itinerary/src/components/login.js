@@ -1,6 +1,5 @@
-import logo from './logo.svg';
-import './App.css';
-import './index.js';
+import '../App.css';
+import '../index.js';
 import { useState }  from "react";
 import { Form, Button, FormGroup, FormControl } from "react-bootstrap";
 
