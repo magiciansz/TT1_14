@@ -65,11 +65,11 @@ const Dashboard = () => {
                 {
                     itineraryList.map(itinerary => (
                         <Col lg={4} md={6} sm={12}>
-                            <Card style={{ width: '95%', margin:"5px" }}>
+                            <Card style={{ width: '95%', margin:"5px", minHeight: "363px" }}>
                                 <Card.Header> {itinerary.title} </Card.Header>
                                 {/* <Card.Img variant="top" src="https://flagsapi.com/Andorra/shiny/64.png" /> */}
                                 <Card.Subtitle style={{ marginTop:'10px'}}> 
-                                    <p style={{ fontSize:"120%"}}> {itinerary.country}</p>
+                                    <p style={{ fontSize:"120%"}}> Country: {itinerary.country}</p>
                                     <p> Budget: ${itinerary.budget} </p>
 
                                 </Card.Subtitle>
@@ -139,7 +139,7 @@ const Dashboard = () => {
                     <Modal.Body closeButton>
                         <div>
                             <p> Country: x </p>
-                            <p> Budget: {details.budget}</p>
+                            <p> Budget: {}</p>
                         </div>
                         <Table striped bordered hover style={{width:"100%"}}>
                             <thead>
