@@ -4,18 +4,23 @@ import { useState } from "react";
 import { Form, Button, FormGroup, FormControl, Toast } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { userLogin } from "../api/user.js";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const navigate = useNavigate();
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
-    const res = userLogin(username, password);
-
-    // do something
-    return JSON.stringify({ username, password });
+    try {
+      const res = await userLogin(username, password);
+      console.log("ADS", res);
+      navigate("/home");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (

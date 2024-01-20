@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const userLogin = async (username, password) => {
-  await axios
+  const res = await axios
     .post(`${BASE_URL}/auth/login/`, {
       username: username,
       password: password,
@@ -15,10 +15,9 @@ export const userLogin = async (username, password) => {
         const userId = data.user_id;
         Cookies.set("accessToken", accessToken);
         Cookies.set("userId", userId);
-        
+        return true;
       }
-    })
-    .catch((err) => {
-      return err;
     });
+
+  return res;
 };
