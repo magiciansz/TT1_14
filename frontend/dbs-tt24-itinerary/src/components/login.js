@@ -1,27 +1,29 @@
-import '../App.css';
-import '../index.js';
-import { useState }  from "react";
-import { Form, Button, FormGroup, FormControl } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import "../App.css";
+import "../index.js";
+import { useState } from "react";
+import { Form, Button, FormGroup, FormControl, Toast } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { userLogin } from "../api/user.js";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
-  function handleLogin (e){
+  function handleLogin(e) {
     e.preventDefault();
-    //alert(JSON.stringify(Form, null, 2));
-    console.log(JSON.stringify({ username, password }));
+    const res = userLogin(username, password);
+
     // do something
     return JSON.stringify({ username, password });
   }
-  
+
   return (
     <div className="App">
       <header className="App-header">
         <form onSubmit={handleLogin}>
-        <Form.Group className="mb-3">
-          <Form.Label>Username</Form.Label>
+          <Form.Group className="mb-3">
+            <Form.Label>Username</Form.Label>
             <Form.Control
               id="username"
               type="text"
@@ -29,9 +31,9 @@ function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Password</Form.Label>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Password</Form.Label>
             <Form.Control
               id="password"
               type="password"
@@ -39,15 +41,17 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-        </Form.Group>
-        <Form.Group className="d-grid">
-          {/* <Button type="submit"><Link to="/home" style={{textDecoration: 'none', color: 'white'}}>Login</Link></Button> */}
-          <Link to="/home"><Button type="submit">Login</Button></Link>
-        </Form.Group>
+          </Form.Group>
+          <Form.Group className="d-grid">
+            {/* <Button type="submit"><Link to="/home" style={{textDecoration: 'none', color: 'white'}}>Login</Link></Button> */}
+            <Link to="/home">
+              <Button type="submit" onClick={handleLogin}>
+                Login
+              </Button>
+            </Link>
+          </Form.Group>
         </form>
-
       </header>
-
     </div>
   );
 }
