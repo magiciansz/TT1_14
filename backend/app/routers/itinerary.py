@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from supabase import Client
 from app.models.itineraryModel import ItineraryBody
-from fastapi.responses import JSONResponse
 
 
 from app.dependencies import get_supa_client
