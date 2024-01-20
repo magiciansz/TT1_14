@@ -15,6 +15,15 @@ async def get_destination(id: int, client: Client = Depends(get_supa_client)):
     res = client.table("destination").select("*").eq("id", id).execute()
     return res
 
+# @router.post("/")
+# async def new_destination(client: Client = Depends(get_supa_client)):
+
+#     res = client.table('destination').insert({
+
+#     })
+#     return 
+
+
 @router.delete("/{id}")
 async def delete_destination(id: int, client: Client = Depends(get_supa_client)):
     res = client.table("destination").delete().eq("id", id).execute()
