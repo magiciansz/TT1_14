@@ -3,6 +3,7 @@ from supabase import Client
 
 from app.dependencies import get_supa_client
 from app.models.destinationModel import DestinationUpdate
+from app.models.destinationModel import DestinationInsert
 
 router = APIRouter()
 
@@ -29,22 +30,23 @@ async def edit_destination(
     return Response(status_code=204)
 
 
-@router.post("/")
+@router.put("/")
 async def new_destination(country_id: int, cost:float, name:str, notes:str, 
+                        dest: DestinationInsert,
                         client: Client = Depends(get_supa_client)):
     res = client.table('destination').insert({
         "country_id": country_id,
         "cost": cost,
         "name": name,
         "notes": notes
-    })
-    
-    return 
+    }).execute()
+    print(res)
+
+    return res
 
 
 @router.delete("/{id}")
 async def delete_destination(id: int, client: Client = Depends(get_supa_client)):
-    print(id, type(id))
     res = client.table("destination").delete().eq("id", id).execute()
     if not res.data:
         raise HTTPException(status_code=404, detail="Destination Not Found")
