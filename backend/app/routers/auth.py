@@ -24,6 +24,7 @@ async def register(body: RegisterBody, client: Client = Depends(get_supa_client)
     client.table('users').insert(jsonable_encoder(newUser)).execute()
     return res
 
+
 # @router.post('/register')
 # async def register(client: Client = Depends(get_supa_client)):
     
