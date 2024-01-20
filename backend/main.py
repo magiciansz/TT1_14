@@ -16,6 +16,7 @@ app.add_middleware(
 )
 
 app.include_router(user_router, prefix='/user')
+app.include_router(user_router, prefix='/destination')
 
 
 @app.get("/")
