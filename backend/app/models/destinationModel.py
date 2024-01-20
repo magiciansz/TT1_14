@@ -8,8 +8,8 @@ class Destination(BaseModel):
 class DestinationInsert(Destination):
     country_id: int
     cost: float
-    name: int
-    notes: Optional[str]
+    name: str
+    notes: Optional[str] = None
 
 class DestinationUpdate(Destination):
     cost: Optional[float] = None
