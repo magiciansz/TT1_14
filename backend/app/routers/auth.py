@@ -13,10 +13,14 @@ bcrypt = Bcrypt()
 
 @router.post("/login")
 async def login(body: LoginBody, client: Client = Depends(get_supa_client)):
-    user = client.table("users").select("*").eq('username', body.username).execute()
-    # if 
-    return res
-
+    res = client.table("users").select("*").eq('username', body.username).execute()
+    # res = client.table("users").select("*").execute()
+    if not res.data:
+        raise HTTPException(status_code=404, detail="User not found")
+    if bcrypt.check_password_hash(res.data[0]['password'], body.password):
+        return "Successful"
+    else:
+        raise HTTPException(status_code=401, detail="Password is not correct")
 @router.post("/register")
 async def register(body: RegisterBody, client: Client = Depends(get_supa_client)):
     first_name, last_name, username, password = body.first_name, body.last_name, body.username, body.password
@@ -35,4 +39,3 @@ async def register(body: RegisterBody, client: Client = Depends(get_supa_client)
 
 # @router.post('/register')
 # async def register(client: Client = Depends(get_supa_client)):
-    
