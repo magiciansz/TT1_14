@@ -32,17 +32,16 @@ async def edit_destination(
     return Response(status_code=204)
 
 
-@router.put("/")
-async def new_destination(country_id: int, cost:float, name:str, notes:str, 
-                        dest: DestinationInsert,
+@router.post("/")
+async def new_destination(dest: DestinationInsert,
                         client: Client = Depends(get_supa_client)):
     res = client.table('destination').insert({
-        "country_id": country_id,
-        "cost": cost,
-        "name": name,
-        "notes": notes
+        "country_id": dest.country_id,
+        "cost": dest.cost,
+        "name": dest.name,
+        "notes": dest.notes
     }).execute()
-    print(res)
+    #print(res)
 
     return res
 
