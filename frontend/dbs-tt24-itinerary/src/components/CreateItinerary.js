@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Table from "react-bootstrap/Table";
 
 const CreateItinerary = () => {
   const countryList = ["Singapore", "Malaysia", "Indonesia", "Japan", "Korea"];
@@ -11,14 +12,14 @@ const CreateItinerary = () => {
     title: "",
     budget: 0.0,
     country: "",
-    destination: null,
   });
+  const [chosenDestinations, setChosenDestinations] = useState([]);
+  const [allDestinations, setAllDestinations] = useState();
 
   // Initialise state for potential errors in form
   const [titleError, setTitleError] = useState(false);
   const [budgetError, setBudgetError] = useState(false);
   const [countryError, setCountryError] = useState(false);
-  const [allDestinations, setAllDestinations] = useState();
 
   // Getting all destinations
   React.useEffect(() => {
@@ -28,7 +29,6 @@ const CreateItinerary = () => {
       console.log(result);
       setAllDestinations(result["data"]);
     });
-
   }, []);
 
   //   // Handle form submission
@@ -45,19 +45,39 @@ const CreateItinerary = () => {
       setCountryError(true);
     } else {
       console.log("success!");
-      var url = "https://h4g.fly.dev/destination/";
-      axios.get(url).then((res) => {
-        const result = res.data;
-        console.log(result);
-      });
     }
   };
+
+  function getChosenDestination(chosenId) {
+    for (const destination of allDestinations) {
+      if (destination.id == chosenId) {
+        return destination;
+      }
+    }
+  }
 
   const handleUserInput = (event) => {
     var name = event.target.name;
     var value = event.target.value;
-    setFormData({ ...formData, [name]: value });
+    if (name == "destinations") {
+      const newDestination = getChosenDestination(value);
+      setChosenDestinations((currentDestinations) => [
+        ...currentDestinations,
+        newDestination,
+      ]);
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
+
+  function handleDeleteDestination(e) {
+    console.log(typeof e.target.value)
+    setChosenDestinations((currentDest) =>
+      currentDest.filter((dest) => {
+        return dest.id !== parseInt(e.target.value);
+      })
+    );
+  }
 
   return (
     <>
@@ -124,24 +144,54 @@ const CreateItinerary = () => {
             <div class='d-flex justify-content-between mb-2'>
               <Form.Label class='align-self-end'>Destinations:</Form.Label>
               <Button variant='btn btn-outline-primary' type='submit'>
-                + Add destination
+                + New destination
               </Button>
             </div>
 
             <Form.Select
               aria-label='Destination-Select'
-              name='destination'
+              name='destinations'
               onChange={handleUserInput}
               disabled={!formData.country}
             >
-              {allDestinations && allDestinations.map((dest, index) => (
-                <option value={dest.name} key={dest.id}>
-                  {dest.name} (Cost: ${dest.cost.toFixed(2)})
-                </option>
-              ))}
+              {allDestinations &&
+                allDestinations.map((dest, index) => (
+                  <option value={dest.id} key={dest.id}>
+                    {dest.name} (Cost: ${dest.cost.toFixed(2)})
+                  </option>
+                ))}
             </Form.Select>
           </Form.Group>
         </div>
+
+        {chosenDestinations.length > 0 && (
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Cost (S$)</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {chosenDestinations.map((dest, index) => (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{dest.name}</td>
+                  <td>{dest.cost.toFixed(2)}</td>
+                  <td>{dest.notes}</td>
+                  <td>
+                    <Button variant='danger' value={dest.id} onClick={handleDeleteDestination}>
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
 
         <Button variant='primary' type='submit'>
           Submit
