@@ -6,7 +6,7 @@ from app.dependencies import get_supa_client
 router = APIRouter()
 
 @router.get("/")
-async def read_destinations(client: Client = Depends(get_supa_client)):
+async def read_destination(client: Client = Depends(get_supa_client)):
     res = client.table("destination").select("*").execute()
     return res
 
