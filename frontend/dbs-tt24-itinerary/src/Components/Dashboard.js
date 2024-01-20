@@ -1,23 +1,45 @@
-import { Card, ListGroup, Container, Row, Col, Button, Modal, ModalTitle, Table } from "react-bootstrap";
+import { Card, ListGroup, Container, Row, Col, Button, Modal, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import Add from "../Assets/add.png"
 import { MdDeleteForever } from "react-icons/md";
 import axios from 'axios';
 
 const Dashboard = () => {
     const [itineraryList, setItineraryList] = useState([]);
-    const [showDelete, setShowDelete] = useState(false)
-    const [showDetails, setShowDetails] = useState(false)
-    const [details, setDetails] = useState()
+    const [showDelete, setShowDelete] = useState(false);
+    const [toDelete, setToDelete] = useState();
+    const [showDetails, setShowDetails] = useState(false);
+    const [details, setDetails] = useState();
 
-    const handleDelete = () => 
+    const notify = () =>
+        toast.success("Itinerary deleted", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+    });
+
+    const handleDelete = (id) => 
     {
-
+        var url = `https://h4g.fly.dev/destination/${id}`
+        axios.delete(url)
+        .then(response => {
+            console.log("Post Deleted");
+            notify()
+        })
+        .catch(error => {
+            console.error(error);
+        });
     }
 
     const handleEdit = () =>
     {
-
+        // add routing
     }
 
     useEffect(() => {
@@ -26,6 +48,7 @@ const Dashboard = () => {
             const result = res.data;
             setItineraryList(result["data"]); 
         })
+
     }, [])
 
     useEffect(() => {
@@ -60,14 +83,17 @@ const Dashboard = () => {
                                     <Button 
                                         variant="dark" 
                                         style={{marginTop: "10px"}}
-                                        onClick={() => setShowDetails(true)}
+                                        onClick={() => {
+                                            setShowDetails(true)
+                                            setDetails(itinerary)
+                                        }}
                                     > View more</Button>
                                     <Button
                                         variant="danger" 
                                         style={{marginTop: "10px", marginLeft: "3px"}}
                                         onClick={() => {
-                                            console.log("delete")
                                             setShowDelete(true)
+                                            setToDelete(itinerary.id)
                                         }}
                                     > <MdDeleteForever /> </Button>
                                 </Card.Body>
@@ -76,7 +102,7 @@ const Dashboard = () => {
                     ))
                 }
                 <Col lg={4} md={6} sm={12}>
-                    <a style={{textDecoration:"none"}} href="add_later"> 
+                    <a style={{textDecoration:"none"}} href="#create-itinerary"> 
                         <div className="create-itinerary-button" 
                             style={{opacity:"60%"}}>
                             <img 
@@ -96,8 +122,13 @@ const Dashboard = () => {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button variant="danger" onClick={() => setShowDelete(false)}>Yes</Button>
-                        <Button variant="secondary" onClick={() => setShowDelete(false)}>No</Button>
+                        <Button variant="danger" onClick={() => {
+                             handleDelete(toDelete)
+                             setToDelete()
+                             setShowDelete(false)}}>Yes</Button>
+                        <Button variant="secondary" onClick={() => {
+                            setShowDelete(false)
+                            setToDelete()}}>No</Button>
                     </Modal.Footer>
                 </Modal.Dialog>
             </Modal>
@@ -107,8 +138,8 @@ const Dashboard = () => {
                  <Modal.Header style={{ fontWeight: "700", fontSize: "25px"}}> Itinerary title </Modal.Header>
                     <Modal.Body closeButton>
                         <div>
-                            <p> Country: country </p>
-                            <p> Budget: budget </p>
+                            <p> Country: x </p>
+                            <p> Budget: {details.budget}</p>
                         </div>
                         <Table striped bordered hover style={{width:"100%"}}>
                             <thead>
@@ -142,6 +173,14 @@ const Dashboard = () => {
                     </Modal.Footer>
                 </Modal.Dialog>
             </Modal>
+
+            <ToastContainer>
+                position="bottom-right" autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick rtl={false}
+                pauseOnFocusLoss draggable pauseOnHover theme="colored"
+            </ToastContainer>
 
         </Container>
     )
