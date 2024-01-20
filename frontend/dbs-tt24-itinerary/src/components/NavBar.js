@@ -5,10 +5,10 @@ const NavBar = () => {
       <Navbar expand="lg">
         <Container>
           <Navbar.Brand
-            href="#home"
+            href="/home"
             style={{ width: "13%", marginRight: "50px" }}
           >
-            Page Name
+            HomePage
           </Navbar.Brand>
         
           <Navbar.Collapse id="basic-navbar-nav">
