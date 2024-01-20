@@ -17,10 +17,12 @@ async def read_itinerary(client: Client = Depends(get_supa_client)):
     res = client.table("users").select("*").execute()
     return res
 
+
 @router.delete("/itinerary/{id}")
 async def read_itinerary(client: Client = Depends(get_supa_client)):
     res = client.table("users").select("*").execute()
     return res
+
 
 @router.put("/itinerary/{id}")
 async def read_itinerary(client: Client = Depends(get_supa_client)):
