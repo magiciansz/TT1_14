@@ -14,14 +14,19 @@ const NavBar = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link
-                href="#itinerary"
+                href="/home"
               >
                 Itinerary
               </Nav.Link>
               <Nav.Link
-                href="#destination"
+                href="/destination"
               >
                 Destination
+              </Nav.Link>
+              <Nav.Link
+                href="/"
+              >
+                Logout
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
