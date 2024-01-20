@@ -21,18 +21,34 @@ async def get_user_itinerary(id:int, client: Client = Depends(get_supa_client)):
     user_data = client.table("users").select("*").eq("id", id).execute()
     if not user_data.data:
         raise HTTPException(status_code=404, detail="User Not Found")
-    user_itinerary = client.table('itinerary').select("id").eq("user_id", id).execute()
+    user_itinerary = client.table('itinerary').select("*").eq("user_id", id).execute()
     if not user_itinerary.data:
         return {}
     arrayOfItineraryIDs = []
+    mappingOfItineraries = {}
     for itinerary in user_itinerary.data:
         arrayOfItineraryIDs.append(itinerary['id'])
-    destination_itineraries = client.table('itinerary_destination').select("destination_id").in_('itinerary_id', arrayOfItineraryIDs).execute()
+        mappingOfItineraries[itinerary['id']] = {
+            'title': itinerary['title'],
+            'country_id': 1,
+            'budget': itinerary['budget'],
+            'destinations': []
+        }
+    destination_itineraries = client.table('itinerary_destination').select("destination_id", "itinerary_id").in_('itinerary_id', arrayOfItineraryIDs).execute()
     arrayOfDestinationIDs = []
-    for destination in destination_itineraries.data:
-        arrayOfDestinationIDs.append(destination['destination_id'])
+    for destinationItinerary in destination_itineraries.data:
+        arrayOfDestinationIDs.append(destinationItinerary['destination_id'])
     destinations = client.table('destination').select("*").in_('id', arrayOfDestinationIDs).execute()
-    return destinations
+    mappingOfDestinations = {}
+    for destination in destinations.data:
+        mappingOfDestinations[destination['id']] = destination
+
+    for destinationItinerary in destination_itineraries.data:
+        mappingOfItineraries[destinationItinerary['itinerary_id']]['destinations'].append(mappingOfDestinations[destinationItinerary['destination_id']])
+    finalItineraries = []
+    for k, v in mappingOfItineraries.items():
+        finalItineraries.append(v)
+    return finalItineraries
 
 
     #return Response(status_code=200)
