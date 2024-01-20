@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from supabase import Client
 from pydantic import BaseModel
-from ..models.authModel import LoginBody
-from ..models.authModel import RegisterBody
+from app.models.authModel import LoginBody
+from app.models.authModel import RegisterBody
 from fastapi.encoders import jsonable_encoder
 from flask_bcrypt import Bcrypt
 
@@ -15,7 +15,7 @@ bcrypt = Bcrypt()
 async def login(body: LoginBody, client: Client = Depends(get_supa_client)):
     user = client.table("users").select("*").eq('username', body.username).execute()
     # if 
-    return res
+    return ""
 
 @router.post("/register")
 async def register(body: RegisterBody, client: Client = Depends(get_supa_client)):
@@ -23,14 +23,11 @@ async def register(body: RegisterBody, client: Client = Depends(get_supa_client)
     res = client.table("users").select("*").eq('username', username).execute()
     if res.data:
         raise HTTPException(status_code=400, detail="User already exists")
+    
     hash = bcrypt.generate_password_hash(password)
     newUser = RegisterBody(first_name= first_name, last_name= last_name, username= username, password= hash)
     client.table('users').insert(jsonable_encoder(newUser)).execute()
-    return {
-        first_name: first_name,
-        last_name: last_name,
-        username: username
-    }
+    return Response(status_code=201)
 
 
 # @router.post('/register')
