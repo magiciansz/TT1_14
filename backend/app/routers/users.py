@@ -11,12 +11,14 @@ async def read_users(client: Client = Depends(get_supa_client)):
     return res
 
 @router.get("/{id}")
-async def get_user(id:int, client: Client = Depends(get_supa_client)):
-    res = client.table("users").select("*").eq("id", id).execute()
-    entry_data = res.data[0]
-    #print(entry_data)
+async def get_user_itinerary(id:int, client: Client = Depends(get_supa_client)):
+    user_data = client.table("users").select("*").eq("id", id).execute()
+    user_id = user_data.data[0]['id']
+    user_itinerary = client.table('itinerary').select("*").eq("user_id", user_id).execute()
 
-    if not res.data:
-        raise HTTPException(status_code=404, detail="User Not Found")
-    return Response(status_code=200)
+    return user_itinerary
+
+
+    #return Response(status_code=200)
+
 
