@@ -29,6 +29,15 @@ async def edit_destination(
     return Response(status_code=204)
 
 
+# @router.post("/")
+# async def new_destination(client: Client = Depends(get_supa_client)):
+
+#     res = client.table('destination').insert({
+
+#     })
+#     return 
+
+
 @router.delete("/{id}")
 async def delete_destination(id: int, client: Client = Depends(get_supa_client)):
     print(id, type(id))
