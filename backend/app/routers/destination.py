@@ -17,13 +17,15 @@ async def read_destination(client: Client = Depends(get_supa_client)):
 async def edit_destination(
     id: int, dest: DestinationUpdate, client: Client = Depends(get_supa_client)
 ):
-    res = (
-        client.table("destination")
-        .update({"cost": dest.cost, "notes": dest.notes})
-        .eq("id", id)
-        .execute()
-    )
-    print(res)
+    entry = client.table("destination").select("*").eq("id", id).execute()
+    entry_data = entry.data[0]
+    new_destination = {
+        "cost": dest.cost if dest.cost else entry_data["cost"],
+        "notes": dest.notes if dest.notes else entry_data["notes"],
+    }
+
+    res = client.table("destination").update(new_destination).eq("id", id).execute()
+
     if not res.data:
         raise HTTPException(status_code=404, detail="Destination Not Found")
     return Response(status_code=204)
@@ -35,7 +37,7 @@ async def edit_destination(
 #     res = client.table('destination').insert({
 
 #     })
-#     return 
+#     return
 
 
 @router.delete("/{id}")

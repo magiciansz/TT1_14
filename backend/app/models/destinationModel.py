@@ -7,5 +7,5 @@ class Destination(BaseModel):
 
 
 class DestinationUpdate(Destination):
-    cost: Optional[float]
-    notes: Optional[str]
+    cost: Optional[float] = None
+    notes: Optional[str] = None
