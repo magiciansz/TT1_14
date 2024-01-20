@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers import user_router
 from app.routers import auth_router
 from app.routers import destination_router
+from app.routers import itinerary_router
 
 app = FastAPI()
 
@@ -20,7 +21,7 @@ app.add_middleware(
 app.include_router(user_router, prefix='/user')
 app.include_router(destination_router, prefix='/destination')
 app.include_router(auth_router, prefix='/auth')
-app.include_router(auth_router, prefix='/itinerary')
+app.include_router(itinerary_router, prefix='/itinerary')
 
 @app.get("/")
 def root():
