@@ -1,6 +1,6 @@
 import './App.css';
-import Dashboard from "./Components/Dashboard.js";
-import NavBar from './Components/NavBar.js';
+import Dashboard from "./components/Dashboard.js";
+import NavBar from './components/NavBar.js';
 
 
 function App() {

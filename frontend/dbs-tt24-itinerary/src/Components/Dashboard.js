@@ -10,12 +10,6 @@ const Dashboard = () => {
     const [showDetails, setShowDetails] = useState(false)
     const [details, setDetails] = useState()
 
-    const title = "Title 1"
-    const country = "Country 1"
-    const budget = "Budget 1"
-
-    const test = ['test1', 'test2', 'test3', 'test4']
-
     const handleDelete = () => 
     {
 
