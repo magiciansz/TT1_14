@@ -1,4 +1,5 @@
-import { Card, ListGroup, Container, Row, Col, Button } from "react-bootstrap";
+import { Card, ListGroup, Container, Row, Col, Button, Navbar } from "react-bootstrap";
+import NavBar from './NavBar'
 
 const Dashboard = () => {
     const title = "Title 1"
@@ -9,6 +10,7 @@ const Dashboard = () => {
 
     return (
         <Container>
+            <NavBar />
             <Row>
                 {/* {
                     test.map(test => (

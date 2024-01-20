@@ -1,14 +1,18 @@
-import './App.css';
-import Dashboard from "./Components/Dashboard.js";
-import NavBar from './Components/NavBar.js';
-
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/Login";
+import CreateItinerary from "./components/CreateItinerary";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
-    <div className="App">
-      <NavBar/>
-      <Dashboard/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='home' element={<Dashboard />} />
+        <Route path='create-itinerary' element={<CreateItinerary />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

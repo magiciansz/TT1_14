@@ -1,31 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 const CreateItinerary = () => {
   const countryList = ["Singapore", "Malaysia", "Indonesia", "Japan", "Korea"];
-  const destinationList = {
-    destinations: [
-      {
-        id: 1,
-        name: "Marina Bay Sands",
-        cost: 50.0,
-        notes: "Hello world",
-      },
-      {
-        id: 2,
-        name: "Gardens By The Bay",
-        cost: 60.0,
-        notes: "Hello world",
-      },
-      {
-        id: 3,
-        name: "Esplanade",
-        cost: 10.0,
-        notes: "Hello world",
-      },
-    ],
-  };
 
   // Initialize state for form data
   const [formData, setFormData] = useState({
@@ -39,24 +18,40 @@ const CreateItinerary = () => {
   const [titleError, setTitleError] = useState(false);
   const [budgetError, setBudgetError] = useState(false);
   const [countryError, setCountryError] = useState(false);
+  const [allDestinations, setAllDestinations] = useState();
+
+  // Getting all destinations
+  React.useEffect(() => {
+    var url = "https://h4g.fly.dev/destination/";
+    axios.get(url).then((res) => {
+      const result = res.data;
+      console.log(result);
+      setAllDestinations(result["data"]);
+    });
+
+  }, []);
 
   //   // Handle form submission
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      console.log(formData)
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(formData);
 
-      // Setting error state variables to true if error is found
-      if (formData.title.strip == "") {
-        setTitleError(true);
-      } else if (formData.budget <= 0) {
-        setBudgetError(true);
-      } else if (formData.country == "") {
-        setCountryError(true);
-      } else {
-        console.log("success!");
-        
-      }
-    };
+    // Setting error state variables to true if error is found
+    if (formData.title == "") {
+      setTitleError(true);
+    } else if (formData.budget <= 0) {
+      setBudgetError(true);
+    } else if (formData.country == "") {
+      setCountryError(true);
+    } else {
+      console.log("success!");
+      var url = "https://h4g.fly.dev/destination/";
+      axios.get(url).then((res) => {
+        const result = res.data;
+        console.log(result);
+      });
+    }
+  };
 
   const handleUserInput = (event) => {
     var name = event.target.name;
@@ -80,12 +75,8 @@ const CreateItinerary = () => {
               value={formData.title}
               onChange={handleUserInput}
             />
+            {titleError && <Form.Text muted>Please enter a title.</Form.Text>}
           </Form.Group>
-          {titleError && (
-            <Form.Text class='text-danger' muted>
-              Please enter a title.
-            </Form.Text>
-          )}
         </div>
 
         <div>
@@ -95,15 +86,13 @@ const CreateItinerary = () => {
               type='number'
               placeholder='Enter budget'
               name='budget'
-              value={formData.title}
+              value={formData.budget}
               onChange={handleUserInput}
             />
+            {budgetError && (
+              <Form.Text muted>Please enter a budget for your trip.</Form.Text>
+            )}
           </Form.Group>
-          {budgetError && (
-            <Form.Text class='text-danger' muted>
-              Please enter a budget for your trip.
-            </Form.Text>
-          )}
         </div>
 
         <div>
@@ -123,17 +112,17 @@ const CreateItinerary = () => {
               ))}
             </Form.Select>
             {countryError && (
-            <Form.Text class='text-danger' muted>
-              Please select a country for your trip.
-            </Form.Text>
-          )}
+              <Form.Text muted>
+                Please select a country for your trip.
+              </Form.Text>
+            )}
           </Form.Group>
         </div>
 
         <div>
           <Form.Group className='mb-3'>
             <div class='d-flex justify-content-between mb-2'>
-              <Form.Label class="align-self-end">Destination:</Form.Label>
+              <Form.Label class='align-self-end'>Destinations:</Form.Label>
               <Button variant='btn btn-outline-primary' type='submit'>
                 + Add destination
               </Button>
@@ -145,9 +134,9 @@ const CreateItinerary = () => {
               onChange={handleUserInput}
               disabled={!formData.country}
             >
-              {destinationList.destinations.map((dest, index) => (
+              {allDestinations && allDestinations.map((dest, index) => (
                 <option value={dest.name} key={dest.id}>
-                  {dest.name} (Cost: {dest.cost})
+                  {dest.name} (Cost: ${dest.cost.toFixed(2)})
                 </option>
               ))}
             </Form.Select>
