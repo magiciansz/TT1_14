@@ -2,26 +2,31 @@ import { Card, Navbar, Container, Nav } from "react-bootstrap";
 
 const NavBar = () => {
     return (
-      <Navbar expand="lg">
+      <Navbar bg="primary" data-bs-theme="dark">
         <Container>
           <Navbar.Brand
-            href="#home"
+            href="/home"
             style={{ width: "13%", marginRight: "50px" }}
           >
-            Page Name
+            HomePage
           </Navbar.Brand>
         
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link
-                href="#itinerary"
+                href="/home"
               >
                 Itinerary
               </Nav.Link>
               <Nav.Link
-                href="#destination"
+                href="/destination"
               >
                 Destination
+              </Nav.Link>
+              <Nav.Link
+                href="/"
+              >
+                Logout
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
