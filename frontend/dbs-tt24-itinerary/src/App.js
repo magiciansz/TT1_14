@@ -5,6 +5,7 @@ import CreateItinerary from "./components/CreateItinerary";
 import Dashboard from "./components/Dashboard";
 import AddDestination from './components/AddDestination';
 import Destination from './components/Destination';
+import EditDestination from './components/EditDestination';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path='create-itinerary' element={<CreateItinerary />} />
         <Route path='create-destination' element={<AddDestination />} />
         <Route path='destination' element={<Destination />} />
+        <Route path="edit-destination/:id" element={<EditDestination />} />
+
       </Routes>
     </BrowserRouter>
   );
