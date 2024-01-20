@@ -50,4 +50,4 @@ async def update_itinerary(id: int, body : ItineraryBody, client: Client = Depen
                                             "title": body.title}).eq("id", id).execute()
     if not res.data:
         raise HTTPException(status_code=404, detail="Itinerary Not Found")
-    return Response(status_code=204)
+    return Response(status_code=200)
