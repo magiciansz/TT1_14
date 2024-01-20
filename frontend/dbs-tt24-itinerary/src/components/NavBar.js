@@ -2,7 +2,7 @@ import { Card, Navbar, Container, Nav } from "react-bootstrap";
 
 const NavBar = () => {
     return (
-      <Navbar expand="lg">
+      <Navbar bg="primary" data-bs-theme="dark">
         <Container>
           <Navbar.Brand
             href="/home"
