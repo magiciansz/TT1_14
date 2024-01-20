@@ -29,7 +29,6 @@ function Destination() {
   return (
     <div className='App'>
       <NavBar />
-      <header className='App-header'>
         <p>Country name</p>
 
         <Link to='/create-destination'>
@@ -69,7 +68,6 @@ function Destination() {
             ))}
           </tbody>
         </Table>
-      </header>
     </div>
   );
 }
