@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 from supabase import Client
 
 from app.dependencies import get_supa_client
+from app.models.destinationModel import DestinationUpdate
 
 router = APIRouter()
 
@@ -12,13 +13,13 @@ async def read_destination(client: Client = Depends(get_supa_client)):
     return res
 
 
-@router.put("/{id}")
+@router.patch("/{id}")
 async def edit_destination(
-    id: int, cost: float, notes: str, client: Client = Depends(get_supa_client)
+    id: int, dest: DestinationUpdate, client: Client = Depends(get_supa_client)
 ):
     res = (
         client.table("destination")
-        .update({"cost": cost, "notes": notes})
+        .update({"cost": dest.cost, "notes": dest.notes})
         .eq("id", id)
         .execute()
     )
@@ -30,6 +31,7 @@ async def edit_destination(
 
 @router.delete("/{id}")
 async def delete_destination(id: int, client: Client = Depends(get_supa_client)):
+    print(id, type(id))
     res = client.table("destination").delete().eq("id", id).execute()
     if not res.data:
         raise HTTPException(status_code=404, detail="Destination Not Found")
