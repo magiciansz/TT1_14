@@ -13,6 +13,10 @@ async def read_destination(client: Client = Depends(get_supa_client)):
     res = client.table("destination").select("*").execute()
     return res
 
+@router.get("/{id}")
+async def get_destination_by_id(id: int, client: Client = Depends(get_supa_client)):
+    res = client.table("destination").select("*").eq("id", id).execute()
+    return res
 
 @router.patch("/{id}")
 async def edit_destination(
