@@ -5,6 +5,9 @@ from ..models.authModel import LoginBody
 from ..models.authModel import RegisterBody
 from fastapi.encoders import jsonable_encoder
 from flask_bcrypt import Bcrypt
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from ..dependencies.auth_handler import signJWT
+
 
 
 from app.dependencies import get_supa_client
@@ -18,7 +21,7 @@ async def login(body: LoginBody, client: Client = Depends(get_supa_client)):
     if not res.data:
         raise HTTPException(status_code=404, detail="User not found")
     if bcrypt.check_password_hash(res.data[0]['password'], body.password):
-        return "Successful"
+        return signJWT(res.data[0]['id'])
     else:
         raise HTTPException(status_code=401, detail="Password is not correct")
 @router.post("/register")
@@ -33,7 +36,7 @@ async def register(body: RegisterBody, client: Client = Depends(get_supa_client)
     return {
         first_name: first_name,
         last_name: last_name,
-        username: username
+        username: username,
     }
 
 
