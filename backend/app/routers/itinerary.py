@@ -24,7 +24,7 @@ async def getbyid_itinerary(id: int, client: Client = Depends(get_supa_client)):
 
 
 @router.post("/")
-async def update_itinerary(body: ItineraryBody, client: Client = Depends(get_supa_client)):
+async def create_itinerary(body: ItineraryBody, client: Client = Depends(get_supa_client)):
     res = client.table("itinerary").insert({"country_id": body.country_id,
                                         "user_id":body.user_id,
                                         "budget": body.budget,
