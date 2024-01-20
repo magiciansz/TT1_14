@@ -41,9 +41,8 @@ async def new_destination(dest: DestinationInsert,
         "name": dest.name,
         "notes": dest.notes
     }).execute()
-    #print(res)
 
-    return res
+    return Response(status_code = 201)
 
 
 @router.delete("/{id}")
