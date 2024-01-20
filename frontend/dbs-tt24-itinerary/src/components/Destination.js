@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Table, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import NavBar from './NavBar.js';
 
 // Display list of destinations for a specific country
 function Destination() {
@@ -27,6 +28,7 @@ function Destination() {
 
   return (
     <div className='App'>
+      <NavBar />
       <header className='App-header'>
         <p>Country name</p>
 

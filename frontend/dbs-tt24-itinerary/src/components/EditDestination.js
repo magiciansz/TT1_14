@@ -1,6 +1,6 @@
 import "../App.css";
 import "../index.js";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +18,21 @@ export default function EditDestination() {
   });
 
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    var url = "https://h4g.fly.dev/destination/" + id;
+    axios.get(url).then((res) => {
+      const result = res.data;
+      const data = result["data"][0];
+
+      setFormData({
+        name: data.name,
+        cost: data.cost,
+        notes: data.notes,
+        country: 1,
+      })
+    });
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
